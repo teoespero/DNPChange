@@ -1,3 +1,10 @@
+-- check the last ID
+ select max(id) from DS_Global..Audit
+ 
+ -- check if it exist
+ select * from DS_Global..Audit where [description] = 'DNP flags changed from the prior month to this month'
+ 
+-- insert the audit
 insert into DS_Global..[Audit]
 (
     id,
@@ -27,7 +34,7 @@ values
                     END AS IsDeferred
                 FROM PyEmployee E
                 INNER JOIN PayrollRun prevPR ON prevPR.Id = E.PayrollRunId
-                LEFT JOIN PyEmployeeWithholding EW ON E.Id = EW.PyEmployeeId AND EW.PyWithholdingTypeId = 20       
+                LEFT JOIN PyEmployeeWithholding EW ON E.Id = EW.PyEmployeeId AND EW.PyWithholdingTypeId = 20      
                 WHERE (datepart(month, prevPR.StartDate) =  datepart(month,dateadd(month, datediff(month, 0, getdate())-1, 0)) AND datepart(year, prevPR.StartDate) =  @2)
                 )
             PREVRRUN ON E.ReferenceKey = PREVRRUN.ReferenceKey
@@ -41,7 +48,7 @@ values
     AS _
     ORDER BY _.LastName',
     null,
-    1,
+    2,
     1,
     null
 )
